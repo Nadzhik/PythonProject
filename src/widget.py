@@ -22,5 +22,3 @@ def mask_account_card(user_input):
     else:
         return "Неизвестный тип карты или счета."
 
-print(mask_account_card("Visa Platinum 7000792289606361"))
-print(mask_account_card("Счет 73654108430135874305"))
