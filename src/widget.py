@@ -17,10 +17,9 @@ def mask_account_card(user_input):
         return "Неизвестный тип карты или счета."
 
 
-def get_date():
-    def get_date(date_string):
-        date_part = date_string.split("T")[0]
-        year, month, day = date_part.split("-")
-        formatted_date = f"{day}.{month}.{year}"
+def get_date(date_str):
+    date_part = date_str.split("T")[0]
+    year, month, day = date_part.split("-")
+    formatted_date = f"{day}.{month}.{year}"
 
-        return formatted_date
+    return formatted_date
