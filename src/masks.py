@@ -14,6 +14,3 @@ def get_mask_account(check_number: str) -> str:
     masked_check = f"**{check_number[-4:]}"
 
     return masked_check
-
-print("Hello")
-print(__name__)
