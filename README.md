@@ -1,1 +1,1 @@
-asdfghujiop;p;lkjhgfd
+#Учебный проект по Python
