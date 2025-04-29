@@ -19,10 +19,10 @@ def sample_account_numbers():
 @pytest.fixture
 def sample_transactions():
     return [
-        {"date": "2023-01-01", "state": "EXECUTED"},
-        {"date": "2023-02-01", "state": "PENDING"},
-        {"date": "2023-03-01", "state": "EXECUTED"},
-        {"date": "2022-12-31", "state": "CANCELED"},
+        {"id": 1, "date": "2023-01-15"},  # Самая ранняя дата
+        {"id": 2, "date": "2023-03-01"},  # Самая поздняя дата
+        {"id": 3, "date": "2022-12-31"},  # Самая старая дата
+        {"id": 4, "date": "2023-01-01"},  # Средняя дата
     ]
 
 @pytest.fixture
@@ -35,8 +35,11 @@ def sample_account_card_inputs():
     ]
 
 @pytest.fixture
-def sample_dates():
+def sample_data():
     return [
-        ("2023-12-31T12:34:56", "31.12.2023"),
-        ("2023-01-01T00:00:00", "01.01.2023"),
+        {"id": 1, "date": "2023-01-01", "state": "EXECUTED"},
+        {"id": 2, "date": "2023-03-01", "state": "EXECUTED"},
+        {"id": 3, "date": "2022-12-31", "state": "PENDING"},
+        {"id": 4, "date": "2023-02-01", "state": "EXECUTED"},
+        {"id": 5, "date": "2023-04-01"}  # Элемент без поля 'state'
     ]
