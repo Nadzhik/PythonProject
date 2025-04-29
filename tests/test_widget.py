@@ -1,5 +1,6 @@
 import pytest
-from src.widget import mask_account_card, get_date
+
+from src.widget import get_date, mask_account_card
 
 
 @pytest.mark.parametrize(
@@ -11,14 +12,14 @@ from src.widget import mask_account_card, get_date
         ("InvalidFormat", "Некорректный формат. Ожидается: 'Тип Номер'."),
     ],
 )
-def test_mask_account_card(input_str, expected):
+def test_mask_account_card(input_str: str, expected: str) -> None:
     assert mask_account_card(input_str) == expected
 
 
-def test_get_date_valid():
+def test_get_date_valid() -> None:
     assert get_date("2023-12-31T12:34:56") == "31.12.2023"
 
 
-def test_get_date_invalid_format():
+def test_get_date_invalid_format() -> None:
     with pytest.raises(ValueError):
         get_date("2023/12/31")  # Неверный формат

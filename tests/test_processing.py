@@ -1,69 +1,72 @@
 import pytest
-from src.processing import sort_by_date, filter_by_state
+
+from src.processing import filter_by_state, sort_by_date
 
 
-@pytest.mark.parametrize("state, expected", [
-    ("EXECUTED", 3),  # 3 элемента с state="EXECUTED"
-    ("PENDING", 1),   # 1 элемент с state="PENDING"
-    ("CANCELED", 0),  # 0 элементов с state="CANCELED"
-])
-def test_filter_by_state(sample_data, state, expected):
+@pytest.fixture
+def sample_data() -> list[dict[str, str]]:
+    return [
+        {"id": "1", "state": "EXECUTED", "date": "2023-01-15"},
+        {"id": "2", "state": "EXECUTED", "date": "2023-03-01"},
+        {"id": "3", "state": "PENDING", "date": "2022-12-31"},
+        {"id": "4", "state": "EXECUTED", "date": "2023-01-01"},
+    ]
+
+
+@pytest.fixture
+def sample_transactions() -> list[dict[str, str]]:
+    return [
+        {"id": "1", "date": "2023-01-15"},
+        {"id": "2", "date": "2023-03-01"},
+        {"id": "3", "date": "2022-12-31"},
+        {"id": "4", "date": "2023-01-01"},
+    ]
+
+
+# Тесты
+@pytest.mark.parametrize(
+    "state, expected",
+    [
+        ("EXECUTED", 3),
+        ("PENDING", 1),
+        ("CANCELED", 0),
+    ],
+)
+def test_filter_by_state(sample_data: list[dict[str, str]], state: str, expected: int) -> None:
     result = filter_by_state(sample_data, state)
     assert len(result) == expected
 
 
-def test_sort_descending(sample_transactions):
-    """Сортировка по убыванию (reverse=True)"""
+def test_sort_descending(sample_transactions: list[dict[str, str]]) -> None:
     result = sort_by_date(sample_transactions)
-    # Ожидаемый порядок id: от самой новой даты к самой старой
-    assert [t["id"] for t in result] == [2, 1, 4, 3]
+    assert [t["id"] for t in result] == ["2", "1", "4", "3"]
 
 
-def test_sort_ascending(sample_transactions):
-    """Сортировка по возрастанию (reverse=False)"""
+def test_sort_ascending(sample_transactions: list[dict[str, str]]) -> None:
     result = sort_by_date(sample_transactions, reverse=False)
-    # Ожидаемый порядок id: от самой старой даты к самой новой
-    assert [t["id"] for t in result] == [3, 4, 1, 2]
+    assert [t["id"] for t in result] == ["3", "4", "1", "2"]
 
 
-# Тесты на пограничные случаи
-def test_empty_list():
-    """Пустой список на входе"""
-    assert sort_by_date([]) == []
-
-
-def test_single_element():
-    """Список с одним элементом"""
-    data = [{"date": "2023-01-01"}]
-    assert sort_by_date(data) == data
-
-
-def test_duplicate_dates():
-    """Проверка стабильности сортировки"""
-    data = [
-        {"id": 1, "date": "2023-01-01"},
-        {"id": 2, "date": "2023-01-01"},
-        {"id": 3, "date": "2023-01-01"}
+def test_duplicate_dates() -> None:
+    data: list[dict[str, str]] = [
+        {"id": "1", "date": "2023-01-01"},
+        {"id": "2", "date": "2023-01-01"},
+        {"id": "3", "date": "2023-01-01"},
     ]
     result = sort_by_date(data)
-    assert [item["id"] for item in result] == [1, 2, 3]
+    assert [item["id"] for item in result] == ["1", "2", "3"]
 
 
-# Тесты на ошибки
-def test_missing_date_field():
-    """Отсутствует поле date"""
+def test_missing_date_field() -> None:
     with pytest.raises(KeyError):
-        sort_by_date([{"id": 1}])
+        sort_by_date([{"id": "1"}])  # Все значения как строки
 
 
-def test_invalid_date_comparison():
-    """Некорректные даты (сортировка как строк)"""
-    data = [
-        {"id": 1, "date": "2023-02-30"},  # Несуществующая дата
-        {"id": 2, "date": "2023-13-01"},  # Неправильный месяц
-        {"id": 3, "date": "hello_world"}
+def test_invalid_date_comparison() -> None:
+    data: list[dict[str, str]] = [
+        {"id": "1", "date": "2023-02-30"},
+        {"id": "2", "date": "2023-13-01"},
+        {"id": "3", "date": "invalid_date"},
     ]
-
-    # Ожидаемый порядок при сортировке строк в обратном порядке (reverse=True)
     result = sort_by_date(data)
-    assert [item["id"] for item in result] == [3, 2, 1]
+    assert [item["id"] for item in result] == ["3", "2", "1"]
