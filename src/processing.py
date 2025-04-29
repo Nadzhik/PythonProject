@@ -1,28 +1,15 @@
-# tests/test_processing.py
-import pytest
-from processing import filter_by_state, sort_by_date
+def filter_by_state(data: list[dict[str, str]], state: str = 'EXECUTED') -> list[dict[str, str]]:
+    """Фильтрует список словарей по заданному состоянию."""
+    filtered_data = []
+
+    for item in data:
+        if item.get('state') == state:
+            filtered_data.append(item)
+
+    return filtered_data
 
 
-@pytest.fixture
-def sample_data():
-    return [
-        {"date": "2023-01-01", "state": "EXECUTED"},
-        {"date": "2023-02-01", "state": "PENDING"},
-        {"date": "2023-03-01", "state": "EXECUTED"},
-    ]
 
-
-def test_filter_by_state(sample_data):
-    filtered = filter_by_state(sample_data, "EXECUTED")
-    assert len(filtered) == 2
-    assert all(item["state"] == "EXECUTED" for item in filtered)
-
-
-def test_sort_by_date_asc(sample_data):
-    sorted_data = sort_by_date(sample_data)
-    assert sorted_data[0]["date"] == "2023-01-01"
-
-
-def test_sort_by_date_desc(sample_data):
-    sorted_data = sort_by_date(sample_data, reverse=True)
-    assert sorted_data[0]["date"] == "2023-03-01"
+def sort_by_date(data: list[dict[str, str]], reverse: bool = True) -> list[dict[str, str]]:
+    """Сортирует список словарей по дате."""
+    return sorted(data, key=lambda x: x['date'], reverse=reverse)
