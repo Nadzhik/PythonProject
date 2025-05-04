@@ -7,7 +7,7 @@ def mask_account_card(user_input: str) -> str:
         return "Некорректный формат. Ожидается: 'Тип Номер'."
     last_space_index = user_input.rfind(" ")
     card_type = user_input[:last_space_index].strip()
-    number = user_input[last_space_index + 1:].strip()
+    number = user_input[last_space_index + 1 :].strip()
     try:
         if card_type in ["Visa", "Visa Platinum", "Maestro", "MasterCard", "Visa Classic", "Visa Gold"]:
             masked_number = get_mask_card_number(number)

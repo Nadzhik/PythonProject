@@ -62,6 +62,28 @@ account_number = "1234567890123456"
 masked_account = get_mask_account(account_number)
 print(masked_account)  # Ожидаемый вывод: "**3456"
 ```
+#### Модуль generators
+
+Содержит функции для обработки данных транзакций:
+
+- `filter_by_currency(transactions, currency)` — возвращает транзакции в указанной валюте.
+- `transaction_descriptions(transactions)` — возвращает описания транзакций.
+- `card_number_generator(start, end)` — генерирует номера карт в заданном диапазоне.
+
+Примеры использования:
+
+##### Фильтрация транзакций по USD
+usd_transactions = filter_by_currency(transactions, "USD")
+for tx in usd_transactions:
+    print(tx)
+
+##### Получение описаний транзакций
+for desc in transaction_descriptions(transactions):
+    print(desc)
+
+##### Генерация номеров карт
+for card in card_number_generator(1, 5):
+    print(card)
 
 ## Тестирование
 Для запуска тестов выполните:
